@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Logistics - Track Your Package</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { padding: 10px; margin-top: 10px; width: 100%; }
+    #result { margin-top: 20px; white-space: pre-wrap; background: #f3f3f3; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>📦 Track Your Package</h2>
+  <input id="code" placeholder="Enter Tracking Code (e.g. TRK-1721623456)">
+  <button onclick="track()">Track</button>
+  <div id="result"></div>
+
+  <script>
+    async function track() {
+      const code = document.getElementById("code").value.trim();
+      if (!code) return alert("Please enter a tracking code.");
+
+      const url = `https://script.google.com/macros/s/AKfycbwo2c3gAeMqDYf56GNhm0-QOonqvizAGaVL3u4ZWeetVPmgcZeVm1U6lYyPXfDBP4xlmw/exec?track=1&code=${code}`;
+      const res = await fetch(url);
+      const text = await res.text();
+
+      try {
+        const data = JSON.parse(text);
+        document.getElementById("result").innerText =
+          `🔍 Tracking Info:\n\n📦 Code: ${code}\n👤 Sender: ${data.sender}\n📍 Origin: ${data.origin}\n👤 Receiver: ${data.receiver}\n📦 Destination: ${data.destination}\n📶 Status: ${data.status}\n⏱️ Last Updated: ${data.last_updated}`;
+      } catch {
+        document.getElementById("result").innerText = "❌ Tracking code not found.";
+      }
+    }
+  </script>
+</body>
+</html>
