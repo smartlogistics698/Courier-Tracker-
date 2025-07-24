@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Track Package - Smart Logistics</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Logistics - Track Package</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body { font-family: sans-serif; padding: 20px; }
     input, button { padding: 10px; margin-top: 10px; width: 100%; }
-    #result { margin-top: 20px; white-space: pre-wrap; background: #f3f3f3; padding: 10px; }
+    #result { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 10px; }
   </style>
 </head>
 <body>
-  <h2>📦 Smart Logistics</h2>
+  <h2>📦 Track Your Package</h2>
   <input id="code" placeholder="Enter Tracking Code">
   <button onclick="track()">Track</button>
   <div id="result"></div>
@@ -34,7 +34,7 @@
           `Destination: ${data.destination}\n` +
           `Status: ${data.status}\n` +
           `Last Updated: ${data.last_updated}`;
-      } catch (e) {
+      } catch (err) {
         document.getElementById("result").innerText = "❌ Tracking code not found.";
       }
     }
