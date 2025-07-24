@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - Add Package</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { padding: 10px; margin: 5px 0; width: 100%; }
+    #msg { margin-top: 20px; color: green; }
+  </style>
+</head>
+<body>
+  <h2>📤 Add Package Info</h2>
+  <input id="sender" placeholder="Sender Name">
+  <input id="receiver" placeholder="Receiver Name">
+  <input id="origin" placeholder="Origin">
+  <input id="destination" placeholder="Destination">
+  <input id="status" placeholder="Package Status">
+  <button onclick="submit()">Add Package</button>
+  <div id="msg"></div>
+
+  <script>
+    async function submit() {
+      const sender = document.getElementById("sender").value;
+      const receiver = document.getElementById("receiver").value;
+      const origin = document.getElementById("origin").value;
+      const destination = document.getElementById("destination").value;
+      const status = document.getElementById("status").value;
+      const tracking_code = "TRK-" + Date.now();
+      const last_updated = new Date().toLocaleString();
+
+      const url = `https://script.google.com/macros/s/AKfycbzEbv2yl3xbYS_wSpBVqeBskkJkYClq_a73ApAjaeGWFkvPQLMSHM1dLRseK_U8G7FyNQ/exec?add=1&code=${tracking_code}&sender=${encodeURIComponent(sender)}&receiver=${encodeURIComponent(receiver)}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&status=${encodeURIComponent(status)}&last_updated=${encodeURIComponent(last_updated)}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to add package");
+        const text = await response.text();
+        document.getElementById("msg").innerText = `✅ Package added. Code: ${tracking_code}`;
+      } catch (error) {
+        document.getElementById("msg").innerText = `❌ Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
