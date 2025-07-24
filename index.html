@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Logistics - Track Your Package</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { padding: 10px; margin-top: 10px; width: 100%; }
+    #result { margin-top: 20px; white-space: pre-wrap; background: #f3f3f3; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>📦 Track Your Package</h2>
+  <input id="code" placeholder="Enter Tracking Code (e.g. TRK-1721623456)">
+  <button onclick="track()">Track</button>
+  <div id="result"></div>
+
+  <script>
+    async function track() {
+      const code = document.getElementById("code").value.trim();
+      if (!code) return alert("Please enter a tracking code.");
+
+      const url = `https://script.google.com/macros/s/AKfycbzEbv2yl3xbYS_wSpBVqeBskkJkYClq_a73ApAjaeGWFkvPQLMSHM1dLRseK_U8G7FyNQ/exec?track=1&code=${encodeURIComponent(code)}`;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Network response was not ok");
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        document.getElementById("result").innerText =
+          `🔍 Tracking Info:\n\n📦 Code: ${code}\n👤 Sender: ${data.sender}\n📍 Origin: ${data.origin}\n👤 Receiver: ${data.receiver}\n📦 Destination: ${data.destination}\n📶 Status: ${data.status}\n⏱️ Last Updated: ${data.last_updated}`;
+      } catch {
+        document.getElementById("result").innerText = "❌ Tracking code not found or error occurred.";
+      }
+    }
+  </script>
+</body>
+</html>
