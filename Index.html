@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Smart Logistics - Track Your Package</title>
+  <title>Track Package - Smart Logistics</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body { font-family: sans-serif; padding: 20px; }
     input, button { padding: 10px; margin-top: 10px; width: 100%; }
     #result { margin-top: 20px; white-space: pre-wrap; background: #f3f3f3; padding: 10px; }
-    h1 { text-align: center; color: #007bff; }
   </style>
 </head>
 <body>
-  <h1>🚚 Smart Logistics</h1>
-  <h2>📦 Track Your Package</h2>
+  <h2>📦 Smart Logistics</h2>
   <input id="code" placeholder="Enter Tracking Code">
   <button onclick="track()">Track</button>
   <div id="result"></div>
@@ -21,13 +19,22 @@
     async function track() {
       const code = document.getElementById("code").value.trim();
       if (!code) return alert("Please enter a tracking code.");
-      const res = await fetch(`https://script.google.com/macros/s/AKfycbwo2c3gAeMqDYf56GNhm0-QOonqvizAGaVL3u4ZWeetVPmgcZeVm1U6lYyPXfDBP4xlmw/exec?code=${code}`);
-      const text = await res.text();
+
+      const url = `https://script.google.com/macros/s/AKfycbzEbv2yl3xbYS_wSpBVqeBskkJkYClq_a73ApAjaeGWFkvPQLMSHM1dLRseK_U8G7FyNQ/exec?tracking_code=${code}`;
+
       try {
+        const res = await fetch(url);
+        const text = await res.text();
         const data = JSON.parse(text);
-        document.getElementById("result").innerText =
-          `Sender: ${data.sender}\nReceiver: ${data.receiver}\nOrigin: ${data.origin}\nDestination: ${data.destination}\nStatus: ${data.status}\nLast Updated: ${data.last_updated}`;
-      } catch {
+
+        document.getElementById("result").innerText = 
+          `Sender: ${data.sender}\n` +
+          `Receiver: ${data.receiver}\n` +
+          `Origin: ${data.origin}\n` +
+          `Destination: ${data.destination}\n` +
+          `Status: ${data.status}\n` +
+          `Last Updated: ${data.last_updated}`;
+      } catch (e) {
         document.getElementById("result").innerText = "❌ Tracking code not found.";
       }
     }
