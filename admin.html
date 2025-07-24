@@ -1,75 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin - Add Package</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Smart Logistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body { font-family: sans-serif; padding: 20px; }
     input, button { padding: 10px; margin: 5px 0; width: 100%; }
     #msg { margin-top: 20px; color: green; }
-    h1 { text-align: center; color: #007bff; }
-    #form, #msg { display: none; }
   </style>
 </head>
 <body>
-  <h1>🚚 Smart Logistics</h1>
-
-  <div id="login">
-    <h2>🔐 Admin Login</h2>
-    <input type="password" id="password" placeholder="Enter Admin Password">
-    <button onclick="checkPassword()">Login</button>
-  </div>
-
-  <div id="form">
-    <h2>📤 Add Package Info</h2>
-    <input id="sender" placeholder="Sender Name">
-    <input id="receiver" placeholder="Receiver Name">
-    <input id="origin" placeholder="Origin">
-    <input id="destination" placeholder="Destination">
-    <input id="status" placeholder="Package Status">
-    <button onclick="submit()">Add Package</button>
-    <div id="msg"></div>
-  </div>
+  <h2>📤 Add New Package</h2>
+  <input id="sender" placeholder="Sender Name">
+  <input id="receiver" placeholder="Receiver Name">
+  <input id="origin" placeholder="Origin">
+  <input id="destination" placeholder="Destination">
+  <input id="status" placeholder="Package Status">
+  <button onclick="submit()">Submit Package</button>
+  <div id="msg"></div>
 
   <script>
-    const correctPassword = "admin814";
-    let logoutTimer;
-
-    function checkPassword() {
-      const input = document.getElementById("password").value;
-      if (input === correctPassword) {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("form").style.display = "block";
-        startLogoutTimer();
-      } else {
-        alert("❌ Wrong password!");
-      }
-    }
-
-    function startLogoutTimer() {
-      clearTimeout(logoutTimer);
-      // Auto-logout in 5 minutes (300,000 milliseconds)
-      logoutTimer = setTimeout(() => {
-        alert("⏰ Session expired. Please log in again.");
-        location.reload(); // Reload the page to show login form again
-      }, 300000);
-    }
-
     async function submit() {
-      startLogoutTimer(); // Reset timer on activity
-      const sender = document.getElementById("sender").value;
-      const receiver = document.getElementById("receiver").value;
-      const origin = document.getElementById("origin").value;
-      const destination = document.getElementById("destination").value;
-      const status = document.getElementById("status").value;
+      const sender = document.getElementById("sender").value.trim();
+      const receiver = document.getElementById("receiver").value.trim();
+      const origin = document.getElementById("origin").value.trim();
+      const destination = document.getElementById("destination").value.trim();
+      const status = document.getElementById("status").value.trim();
+
+      if (!sender || !receiver || !origin || !destination || !status) {
+        alert("Please fill all fields.");
+        return;
+      }
+
       const tracking_code = "TRK-" + Date.now();
       const last_updated = new Date().toLocaleString();
 
-      const url = `https://script.google.com/macros/s/AKfycbwo2c3gAeMqDYf56GNhm0-QOonqvizAGaVL3u4ZWeetVPmgcZeVm1U6lYyPXfDBP4xlmw/exec?tracking_code=${tracking_code}&sender=${encodeURIComponent(sender)}&receiver=${encodeURIComponent(receiver)}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&status=${encodeURIComponent(status)}&last_updated=${encodeURIComponent(last_updated)}`;
+      const url = `https://script.google.com/macros/s/AKfycbzEbv2yl3xbYS_wSpBVqeBskkJkYClq_a73ApAjaeGWFkvPQLMSHM1dLRseK_U8G7FyNQ/exec` +
+        `?tracking_code=${tracking_code}` +
+        `&sender=${encodeURIComponent(sender)}` +
+        `&receiver=${encodeURIComponent(receiver)}` +
+        `&origin=${encodeURIComponent(origin)}` +
+        `&destination=${encodeURIComponent(destination)}` +
+        `&status=${encodeURIComponent(status)}` +
+        `&last_updated=${encodeURIComponent(last_updated)}`;
 
-      await fetch(url);
-      document.getElementById("msg").style.display = "block";
-      document.getElementById("msg").innerText = `✅ Package added. Code: ${tracking_code}`;
+      try {
+        await fetch(url);
+        document.getElementById("msg").innerText = `✅ Package Added.\nTracking Code: ${tracking_code}`;
+      } catch (err) {
+        document.getElementById("msg").innerText = "❌ Failed to add package.";
+      }
     }
   </script>
 </body>
